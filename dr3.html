@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>День Рождения! 🎉</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(45deg, #af42c5, #814674);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Comic Neue', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #8e3c91;
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5em;
+            margin: 0 0 20px 0;
+            text-shadow: 2px 2px 0 #fff;
+        }
+
+        .input-group {
+            position: relative;
+            margin: 25px 0;
+        }
+
+        input {
+            font-size: 1.2em;
+            padding: 15px 30px;
+            border: 3px solid #ff69b4;
+            border-radius: 30px;
+            width: 150px;
+            text-align: center;
+            background: #fff0f5;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 15px #9c2db8;
+        }
+
+        button {
+            background: linear-gradient(45deg, #963789, #96215f);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Pacifico', cursive;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255, 20, 147, 0.4);
+        }
+
+        #output {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8cdee;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .birthday-text {
+            color: #831a91;
+            font-size: 1.2em;
+            margin: 10px 0;
+            animation: slideIn 0.5s ease-out;
+            padding: 8px;
+            border-left: 4px solid #8a1a84;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff0;
+            animation: confettiFall 3s linear;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .error {
+            color: #ff0000;
+            background: #ffe6e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎂 Напиши любое число)🎈</h1>
+        <div class="input-group">
+            <input type="number" id="numberInput" min="1" value="1" placeholder="Цифра">
+        </div>
+        <button onclick="generateText()">Нажми меня 🎉</button>
+        <div class="error" id="errorMessage">Пожалуйста, напиши цифорку поменьше)</div>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        async function generateText() {
+            const count = parseInt(document.getElementById('numberInput').value);
+            const outputDiv = document.getElementById('output');
+            const errorDiv = document.getElementById('errorMessage');
+            const button = document.querySelector('button');
+            
+            outputDiv.innerHTML = '';
+            errorDiv.style.display = 'none';
+
+            if (isNaN(count) || count < 1 || count > 1000) {
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Блокируем кнопку на время анимации
+            button.disabled = true;
+            button.style.opacity = '0.7';
+            button.innerText = 'Погнали';
+
+            // Добавляем конфетти
+            for(let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3000);
+            }
+
+            // Создаем поздравления с задержкой
+            for (let i = 0; i < count; i++) {
+                await new Promise(resolve => setTimeout(resolve, 200)); // Задержка 200 мс
+                const p = document.createElement('div');
+                p.className = 'birthday-text';
+                p.innerHTML = `🎉 С Днём Рождения, милашка! (${i + 1})`;
+                outputDiv.appendChild(p);
+            }
+
+            // Разблокируем кнопку
+            button.disabled = false;
+            button.style.opacity = '1';
+            button.innerText = 'Ура! Сгенерировать поздравления 🎉';
+        }
+    </script>
+</body>
+</html>
